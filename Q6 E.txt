@@ -1,0 +1,3 @@
+The 
+The histogram shape of the first variable shows 
+The first variable values comes from a normalized data as the qq-plot of that data is more evenly distributed along the line vector as compared to 2nd variable where the data points are more scattered from the line vector.  
