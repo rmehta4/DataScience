@@ -1,3 +1,5 @@
-The 
-The histogram shape of the first variable shows 
+The the mean value of 1st variable is approximately same as medium which means that the distribution is approximately symmetrical.
+The the mean value of 2nd variable is not close to medium, mean > median, which means that the distribution is negatively skewed.
+The standard deviation of 1st variable is 1.46 which means the data is not skewed but the standard devaition of 2nd variable is 5.23 which means data is skewed.
+The histogram shape of the first variable shows that data is evenly distributed about the mean that means it is normalised and shape of second variable shows that data is not evenly distributed about the mean and is not normalised.
 The first variable values comes from a normalized data as the qq-plot of that data is more evenly distributed along the line vector as compared to 2nd variable where the data points are more scattered from the line vector.  
