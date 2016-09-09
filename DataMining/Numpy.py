@@ -2,44 +2,132 @@
 """
 Created on Sun Aug 28 17:26:06 2016
 
-@author: rutvij
+@author: Team31
+       : Rutvij Mehta
+       : Sagar Gupta
+       : Tanay Pandey
 """
 
 import numpy as np
 
-s = np.random.normal(5,1, 16)
+
+
 def get_chunks2(s, n):
   return [s[x:x+n] for x in range(0, len(s), n)]
-  
-A =  np.matrix(get_chunks2(s,4))
-#print mat
+"""
+(a) (1 point) Generate a 4*4 matrix A with input from Gaussian Distribution with
+mean 5 and variance 1.
 
-#print mat[[1,3],:]
+"""  
+data = np.random.normal(5,1,16)
 
-#print mat[:,3]
+A =  np.matrix(get_chunks2(data,4))
+print A
+print "\n"
+
+"""
+(b) (1 point) Access rows 2 and 4 only.
+
+"""
+
+print A[[1,3],:]
+print len(A)
+print "\n"
+
+"""
+c) (2 points) Calculate sum of the 3rd row, the diagonal and the 4th column in the
+matrix.
+"""
+def calculate_sum(A):
+    sum = 0
+    for x in range(0,len(A)):
+        sum = sum + A[2,x] + A[x,3] + A[x,x]
+    return sum
+
+print "\n"
+print "SUM IS"
+print str(calculate_sum(A)) + "\n"
+
+"""
+(d) (2 points) Sum of all elements in the matrix (use a for/while loop).
+"""
+"""
+
+(e) (1 point) Generate a diagonal matrix B with from [2, 3, 4, 5] (using this vector as
+the diagonal entries).
+
+"""
 B = np.diag([2, 3, 4, 5])
+print str(B) + "\n"
 
-C = A * B  ## Que g
+"""
+(f) (2 points) From A and B, using one matrix operation to get a new matrix C such
+that, the first row of C is equal to the first row of A times 2, the second row of C
+is equal to the second row of A times 3 and so on.
 
-D = (A.transpose()*B).transpose() ## Que f
-#print C
-#print A
-#print D
+"""
 
+C = (A.transpose()*B).transpose()
+print C
+
+"""
+(g) (2 points) From A and B, using one matrix operation to get a new matrix D such
+that, the first column of D is equal to the first column of A times 2, the second
+column of D is equal to the second column of A times 3 and so on.
+"""
+D = A * B
+print "\n"
+print D
+
+"""
+(h) (2 points) X = [1, 2, 3, 4] T , Y = [9, 6, 4, 1] T . Computing the covariance matrix of
+X and Y in one function, and calculating the result by basic operations (without
+using that function).
+
+"""
+X = np.array([1,2,3,4]).transpose()
+Y = np.array([9,6,4,1]).transpose()
+
+print "\n Here \n"
+
+print X
+print Y
+print np.cov(X,Y)
+
+
+def print_cov(X,Y):
+    n = len(X)
+    x_mean = np.mean(X)
+    y_mean = np.mean(Y)
+    sum_first =0
+    sum_last=0
+    sum_diag=0
+    result=[]
+    for i in range(len(X)):
+        sum_first = sum_first + ((X[i]**2)-(x_mean**2))
+        sum_last = sum_last +((Y[i]**2)-(y_mean)**2)
+        sum_diag = sum_diag + ((X[i]*Y[i])-(x_mean*y_mean))
+    result.append((sum_first,sum_last,sum_diag))
+    return result
+    
+    
+print print_cov(X,Y)
+"""
+(i) (2 points) Verifying the equation in X: x  ̄ 2 = (x̄ 2 +σ 2 (x)), where σ(x) is the estimate
+of the standard deviation.
+"""
 First = np.array([1,2,3,4])
 Second = np.matrix([9,6,4,1])
 
 Third = np.array([1,4,9,16])
 
 mean_First = np.mean(First)
-mean_Second = np.mean(Third)
-
-#print  mean_First
-print mean_Second
-
+mean_Third = np.mean(Third)
 Sd = np.std(First)
-#print Sd
-print (mean_First**2) + (Sd**2)
+
+if(mean_Third == ((mean_First**2) + (Sd**2))):
+    print "both are same:"
+    
 
 #x = np.array([[0, 2], [1, 1], [2, 0]]).transpose()
 #print np.cov(x)

@@ -2,42 +2,63 @@
 """
 Created on Sat Sep  3 16:41:06 2016
 
-@author: rutvij
+@author: Team31
+       : Rutvij Mehta
+       : Sagar Gupta
+       : Tanay Pandey
 """
 
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Sep  1 23:08:33 2016
-
-@author: rutvij
-"""
 import numpy as np
 import pandas as pd
-from scipy import spatial
 import matplotlib.pyplot as plt
 
-#from numpy.linalg import inv
-#np.load()
+
+""" Read File Operation """
+
 locations_data = pd.read_csv('locations.csv', sep=',')
 
-# Read titles from dataprint locations_data.dtypes.index 
+
+""" 
+(a) Load the file and read ’lat’ and ’long’ columns. 
+
+"""
+""" Read titles from Data """
 
 latitude = locations_data.lat
 longitude = locations_data.long
 
-print latitude.dtypes
-print locations_data.dtypes.index
-print locations_data.shape
 #print latitude
 #print longitude
 
-#plt.plot(latitude,longitude)
+"""
+(b) Make a 2D plot and label the axes (latitude should be x-axis and longitude
+should be y-axis)
+
+"""
+plt.figure(figsize=(12,10))
+plt.plot(latitude,longitude)
+
+
+"""
+
+(c) Compute the mean of latitude and longitude values. Consider this point as P.
+
+"""
 
 latitude_mean = np.mean(latitude)
 longitude_mean = np.mean(longitude)
+P = (latitude_mean,longitude_mean)
 
-#print latitude_mean
-#print longitude_mean
+"""
+
+(c)-->(a) Compute the distance between P and the 1718 data points us-
+ing the following distance measures: Euclidean distance, Mahalanobis dis-
+tance,City block metric, Minkowski metric (for p=3), Chebyshev distance and
+Cosine distance.
+
+
+"""
+
 
 def dist(x,y,mean,p):  
     dist1 = []
@@ -46,24 +67,7 @@ def dist(x,y,mean,p):
         dist1.append((((abs((x[i]-mean[0])**p) + (abs(y[i]-mean[1])**p))**(1.0/p)),x[i],y[i]))
        # print dist
     return dist1
-
-#print dist(latitude,latitude_mean)
-#print dist(longitude,longitude_mean)
-mean = (latitude_mean,longitude_mean)
-print "mean is"
-print mean
-Eucledian = dist(latitude,longitude,mean,2)
-print "Eucledian"
-#sorted(Eucledian, key=lambda data: data[0])
-Eucledian.sort()
-print "Sorted"
-print Eucledian
-
-plot_Euc_lat=[]
-plot_Euc_long=[]
-plot_Euc_lat_all=[]
-plot_Euc_long_all=[]
-
+    
 def min_plot(x,y,Obj):
     for i in range(10):
         y.append(Obj[i][2])
@@ -73,25 +77,100 @@ def all_plot(x,y,Obj):
     for i in range(len(Obj)):
         y.append(Obj[i][2])
         x.append(Obj[i][1])
+        
+"""
+
+Eucliedian Distance
+
+"""
+Eucledian = dist(latitude,longitude,P,2)
+Eucledian.sort()
+
+
+plot_Euc_lat=[]
+plot_Euc_long=[]
+plot_Euc_lat_all=[]
+plot_Euc_long_all=[]
 
 min_plot(plot_Euc_lat,plot_Euc_long,Eucledian)  
 all_plot(plot_Euc_lat_all,plot_Euc_long_all,Eucledian) 
 
+#print "\t\t" + str(plot_Euc_lat_all) + str(plot_Euc_long_all)
 #==============================================================================
-# plt.xlim([25,45])
 fig = plt.figure()
-ax1 = fig.add_subplot(3,2,1)
+fig.set_size_inches(10, 10,forward=True)
+circle1 = plt.Circle(P, 1.3, color='b', fill=False)
+ax1 = fig.add_subplot(1,1,1)
+ax1.set_title("Eucledian")
+ax1.set_xlim([37,37.8])
+ax1.set_ylim([-80,-78])
+ax1.add_artist(circle1)
 ax1.scatter(plot_Euc_lat_all,plot_Euc_long_all)
 ax1.scatter(plot_Euc_lat,plot_Euc_long,color="yellow")
 ax1.scatter(latitude_mean,longitude_mean,color="red")
 #==============================================================================
 
+"""
 
+Mahalanobis Distance
+
+"""
+latitude_matrix = np.array(latitude_mean)
+longitude_matrix = np.array(longitude_mean)
+
+cov_mat = np.cov(latitude,longitude,rowvar=0)
+
+inv_mat = np.linalg.inv(cov_mat)
+
+repeated1 = np.repeat(latitude_matrix,1718)
+x_diff = np.subtract(latitude,repeated1)
+
+repeated2 = np.repeat(longitude_matrix,1718)
+y_diff = np.subtract(longitude,repeated2)
+
+diff_xy = np.transpose([x_diff, y_diff])
+
+md = []
+for i in range(len(diff_xy)):
+    md.append((np.sqrt(np.dot(np.dot(np.transpose(diff_xy[i]),inv_mat),diff_xy[i])),latitude[i],longitude[i]))
+
+mahalabonis = md
+mahalabonis.sort()
+print mahalabonis
+
+plot_md_lat=[]
+plot_md_long=[]
+plot_md_lat_all=[]
+plot_md_long_all=[]
+
+min_plot(plot_md_lat,plot_md_long,mahalabonis)
+all_plot(plot_md_lat_all,plot_md_long_all,mahalabonis)
+print plot_md_lat
+print plot_md_long
+
+
+fig1 = plt.figure()
+circle3 = plt.Circle(P, 1.3, color='b', fill=False)
+fig1.set_size_inches(10, 10,forward=True)
+ax4 = fig1.add_subplot(1,1,1)
+ax4.set_title("Mahalanobis")
+#ax4.set_xlim([37,38])
+ax4.set_xlim([37,37.8])
+ax4.set_ylim([-80,-78])
+ax4.add_artist(circle3)
+ax4.scatter(plot_md_lat_all,plot_md_long_all)
+ax4.scatter(plot_md_lat,plot_md_long,color="yellow")
+ax4.scatter(latitude_mean,longitude_mean,color="red")
+
+
+"""
+
+Minkowski
+
+"""
 #print spatial.distance.euclidean(latitude,longitude)
 #plt.plot(Eucledian)
-Minkowski=dist(latitude,longitude,mean,3)
-print ("Minkowski")
-print Minkowski
+Minkowski=dist(latitude,longitude,P,3)
 Minkowski.sort()
 plot_min_lat=[]
 plot_min_long=[]
@@ -101,16 +180,25 @@ plot_min_long_all=[]
 min_plot(plot_min_lat,plot_min_long,Minkowski)
 all_plot(plot_min_lat_all,plot_min_long_all,Minkowski)
 
-#==============================================================================
-# #=Plot=============================================================================
-# plt.xlim([35,45])
-# plt.scatter(plot_min_lat_all,plot_min_long_all)
-# plt.scatter(plot_min_lat,plot_min_long,color="yellow")
-# plt.scatter(latitude_mean,longitude_mean,color="red")
-# #==============================================================================
-#==============================================================================
+fig6 = plt.figure()
+fig6.set_size_inches(10, 10,forward=True)
+ax6 = fig6.add_subplot(1,1,1)
+circle4 = plt.Circle(P, 1.3, color='b', fill=False)
+ax6.add_artist(circle4)
+##ax6.set_xlim([37,38])
+ax6.set_xlim([37,37.8])
+ax6.set_ylim([-80,-78])
+ax6.set_title("Minkowski")
+ax6.scatter(plot_min_lat_all,plot_min_long_all)
+ax6.scatter(plot_min_lat,plot_min_long,color="yellow")
+ax6.scatter(latitude_mean,longitude_mean,color="red")
 
 
+"""
+
+ChebyShev
+
+"""
 
 def Chebyshev_dist(x,y,mean):
     max = -1
@@ -127,11 +215,8 @@ def Chebyshev_dist(x,y,mean):
         result.append((max,x[i],y[i]))
     return result
 
-print "Chebb"
-Chebyshev = Chebyshev_dist(latitude,longitude,mean)
+Chebyshev = Chebyshev_dist(latitude,longitude,P)
 Chebyshev.sort()
-#print Chebyshev
-#print spatial.distance.chebyshev(latitude,longitude)
 plot_Cheb_lat=[]
 plot_Cheb_long=[]
 plot_Cheb_lat_all=[]
@@ -140,11 +225,25 @@ plot_Cheb_long_all=[]
 min_plot(plot_Cheb_lat,plot_Cheb_long,Chebyshev)
 all_plot(plot_Cheb_lat_all,plot_Cheb_long_all,Chebyshev)
 
-#plt.xlim([35,45])
-ax2 = fig.add_subplot(3,2,2)
+fig2 = plt.figure()
+fig2.set_size_inches(10, 10,forward=True)
+ax2 = fig2.add_subplot(1,1,1)
+#ax2.set_xlim([37,38])
+ax2.set_xlim([37,37.8])
+ax2.set_ylim([-80,-78])
+circle5 = plt.Circle(P, 1.3, color='b', fill=False)
+ax2.add_artist(circle5)
+ax2.set_title("Chebyshev")
 ax2.scatter(plot_Cheb_lat_all,plot_Cheb_long_all)
 ax2.scatter(plot_Cheb_lat,plot_Cheb_long,color="yellow")
 ax2.scatter(latitude_mean,longitude_mean,color="red")
+
+"""
+
+Cosine
+
+"""
+
 
 def cosine_dist(x,y,mean):
     dist = 0
@@ -161,10 +260,9 @@ def cosine_dist(x,y,mean):
         result.append((1-dist,x[i],y[i]))
     return result
 
-print "Cosine"
-Cosine=cosine_dist(latitude,longitude,mean)
-Cosine.sort()
 
+Cosine=cosine_dist(latitude,longitude,P)
+Cosine.sort()
 plot_Cosine_lat=[]
 plot_Cosine_long=[]
 plot_Cosine_lat_all=[]
@@ -172,68 +270,25 @@ plot_Cosine_long_all=[]
 
 min_plot(plot_Cosine_lat,plot_Cosine_long,Cosine)
 all_plot(plot_Cosine_lat_all,plot_Cosine_long_all,Cosine)
-
-#plt.xlim([35,45])
-ax3 = fig.add_subplot(3,2,3)
+#plt.xlim([37,38])
+fig3 = plt.figure()
+circle2 = plt.Circle(P, 1.3, color='b', fill=False)
+fig3.set_size_inches(10, 10,forward=True)
+ax3 = fig3.add_subplot(1,1,1)
+ax3.add_artist(circle2)
+ax3.annotate('P', xy=(latitude_mean,longitude_mean), xytext=P,)
+ax3.set_title("Cosine")
+ax3.set_xlim([37,37.8])
+ax3.set_ylim([-80,-78])
 ax3.scatter(plot_Cosine_lat_all,plot_Cosine_long_all)
 ax3.scatter(plot_Cosine_lat,plot_Cosine_long,color="yellow")
 ax3.scatter(latitude_mean,longitude_mean,color="red")
 
+"""
 
+City Block
 
-latitude_matrix = np.array(latitude_mean)
-repeated1 = np.repeat(latitude_matrix,1718)
-longitude_matrix = np.array(longitude_mean)
-repeated2 = np.repeat(longitude_matrix,1718)
-#print repeated
-trans1 = np.transpose(repeated1)
-cov_mat = np.cov(latitude,longitude,rowvar=0)
-#print cov_mat
-inv_mat = np.linalg.inv(cov_mat)
-print "inverse"
-#print inv_mat
-
-xy_mean = np.mean(latitude),np.mean(longitude)
-x_diff = np.subtract(latitude,repeated1)
-#np.array([x_i - xy_mean[0] for x_i in latitude])
-y_diff = np.subtract(longitude,repeated2)
-#np.array([y_i - xy_mean[1] for y_i in longitude])
-print x_diff.shape
-print "X_Diff"
-
-#print "upper"
-
-diff_xy = np.transpose([x_diff, y_diff])
-diff_xy.shape, diff_xy
-
-#print np.transpose(diff_xy[1]).shape
-#print inv_mat.shape
-#print diff_xy.shape
-
-md = []
-for i in range(len(diff_xy)):
-    md.append((np.sqrt(np.dot(np.dot(np.transpose(diff_xy[i]),inv_mat),diff_xy[i])),latitude[i],longitude[i]))
-print "Answer is"
-mahalabonis = md
-mahalabonis.sort()
-print mahalabonis
-
-plot_md_lat=[]
-plot_md_long=[]
-plot_md_lat_all=[]
-plot_md_long_all=[]
-
-min_plot(plot_md_lat,plot_md_long,mahalabonis)
-all_plot(plot_md_lat_all,plot_md_long_all,mahalabonis)
-
-#plt.xlim([35,45])
-ax4 = fig.add_subplot(3,2,4)
-ax4.scatter(plot_md_lat_all,plot_md_long_all)
-ax4.scatter(plot_md_lat,plot_md_long,color="yellow")
-ax4.scatter(latitude_mean,longitude_mean,color="red")
-
-
-#######City Block
+"""
 
 
 def CityBlock(x,y):
@@ -247,12 +302,6 @@ def CityBlock(x,y):
 cityBlock=CityBlock(latitude,longitude)
 cityBlock.sort()
 
-#==============================================================================
-# print cityBlock
-# print spatial.distance.cityblock(latitude,longitude)
-# 
-#==============================================================================
-
 plot_cb_lat=[]
 plot_cb_long=[]
 plot_cb_lat_all=[]
@@ -261,8 +310,16 @@ plot_cb_long_all=[]
 min_plot(plot_cb_lat,plot_cb_long,cityBlock)
 all_plot(plot_cb_lat_all,plot_cb_long_all,cityBlock)
 
-#plt.xlim([35,45])
-ax5 = fig.add_subplot(3,2,(5))
+
+fig5 = plt.figure()
+fig5.set_size_inches(10, 10,forward=True)
+circle6 = plt.Circle(P, 1.3, color='b', fill=False)
+ax5 = fig5.add_subplot(1,1,1)
+#ax5.set_xlim([37,38])
+ax5.set_xlim([37,37.8])
+ax5.set_ylim([-80,-78])
+ax5.add_artist(circle6)
+ax5.set_title("CityBlock")
 ax5.scatter(plot_cb_lat_all,plot_cb_long_all)
 ax5.scatter(plot_cb_lat,plot_cb_long,color="yellow")
 ax5.scatter(latitude_mean,longitude_mean,color="red")
