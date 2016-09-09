@@ -22,17 +22,16 @@ mean 5 and variance 1.
 data = np.random.normal(5,1,16)
 
 A =  np.matrix(get_chunks2(data,4))
+print "\nAnswer a)\n"
 print A
-print "\n"
 
 """
 (b) (1 point) Access rows 2 and 4 only.
 
 """
 
+print "\nAnswer b)\n"
 print A[[1,3],:]
-print len(A)
-print "\n"
 
 """
 c) (2 points) Calculate sum of the 3rd row, the diagonal and the 4th column in the
@@ -44,8 +43,7 @@ def calculate_sum(A):
         sum = sum + A[2,x] + A[x,3] + A[x,x]
     return sum
 
-print "\n"
-print "SUM IS"
+print "\nAnswer c):\n"
 print str(calculate_sum(A)) + "\n"
 
 """
@@ -56,6 +54,7 @@ for x in range(0,len(A)):
     for y in range(0,len(A)):
         sum_matrix = sum_matrix + A[x,y]
 
+print "\nAnswer d):\n"
 print sum_matrix
 """
 
@@ -64,7 +63,8 @@ the diagonal entries).
 
 """
 B = np.diag([2, 3, 4, 5])
-print str(B) + "\n"
+print "\nAnswer e)\n"
+print str(B) 
 
 """
 (f) (2 points) From A and B, using one matrix operation to get a new matrix C such
@@ -74,6 +74,7 @@ is equal to the second row of A times 3 and so on.
 """
 
 C = (A.transpose()*B).transpose()
+print "\nAnswer f)\n"
 print C
 
 """
@@ -82,7 +83,7 @@ that, the first column of D is equal to the first column of A times 2, the secon
 column of D is equal to the second column of A times 3 and so on.
 """
 D = A * B
-print "\n"
+print "\nAnswer g)\n"
 print D
 
 """
@@ -94,7 +95,7 @@ using that function).
 X = np.array([1,2,3,4]).transpose()
 Y = np.array([9,6,4,1]).transpose()
 
-print "\n Here \n"
+print "\nAnswer h)\n"
 
 print X
 print Y
@@ -124,6 +125,7 @@ print print_cov(X,Y)
 (i) (2 points) Verifying the equation in X: x  ̄ 2 = (x̄ 2 +σ 2 (x)), where σ(x) is the estimate
 of the standard deviation.
 """
+print "\nAnswer i)\n"
 First = np.array([1,2,3,4])
 Second = np.matrix([9,6,4,1])
 
