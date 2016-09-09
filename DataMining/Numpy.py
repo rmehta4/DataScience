@@ -92,14 +92,14 @@ X and Y in one function, and calculating the result by basic operations (without
 using that function).
 
 """
-X = np.array([1,2,3,4]).transpose()
-Y = np.array([9,6,4,1]).transpose()
+X = np.array([1,2,3,4]).T
+Y = np.array([9,6,4,1]).T
 
 print "\nAnswer h)\n"
 
 print X
 print Y
-print np.cov(X,Y)
+print np.cov(X,Y,bias=1)
 
 
 def print_cov(X,Y):
