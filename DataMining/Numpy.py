@@ -97,11 +97,6 @@ Y = np.array([9,6,4,1]).transpose()
 
 print "\nAnswer h)\n"
 
-print X
-print Y
-print np.cov(X,Y)
-
-
 def print_cov(X,Y):
     n = len(X)
     x_mean = np.mean(X)
