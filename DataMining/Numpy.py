@@ -129,7 +129,7 @@ mean_Third = np.mean(Third)
 Sd = np.std(First)
 
 if(mean_Third == ((mean_First**2) + (Sd**2))):
-    print "both are same:"
+    print "both are same: "
     
 
 #x = np.array([[0, 2], [1, 1], [2, 0]]).transpose()
