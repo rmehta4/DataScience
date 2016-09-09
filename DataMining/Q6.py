@@ -119,13 +119,15 @@ could this QQ plot be used for? If the data came from a normal distribution, wha
 will happen when we plot the quantiles of our data against the that of a normal
 distribution?
 """
+
+print "Answer :(d)\n\n"
 fig_QQPlot = plt.figure()
 fig_QQPlot.set_size_inches(12, 10,forward=True)
 fig_QQPlot.savefig('Q6_d.png', dpi=100)
-ax1 = fig_QQPlot.add_subplot(2,1,1)
+ax1 = fig_QQPlot.add_subplot(3,1,1)
 stats.probplot(data[0],plot=ax1)
 print"\n"
-ax2 = fig_QQPlot.add_subplot(2,1,2)
+ax2 = fig_QQPlot.add_subplot(3,1,3)
 stats.probplot(data[1],plot=ax2)
 #
 #
