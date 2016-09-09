@@ -99,6 +99,8 @@ print "\nAnswer h)\n"
 
 print X
 print Y
+
+print "By basic operation(numpy)"
 print np.cov(X,Y,bias=1)
 
 
@@ -109,17 +111,18 @@ def print_cov(X,Y):
     sum_first =0
     sum_last=0
     sum_diag=0
-    result=[]
+    #result=[]
     for i in range(len(X)):
         sum_first = sum_first + ((X[i]**2)-(x_mean**2))
         sum_last = sum_last +((Y[i]**2)-(y_mean)**2)
-        print sum_last
+        #print sum_last
         sum_diag = sum_diag + ((X[i]*Y[i])-(x_mean*y_mean))
-        print sum_diag
-    result.append((sum_first/n,sum_last/n,sum_diag/n))
+        #print sum_diag
+    #result.append((sum_first/n,sum_last/n,sum_diag/n))
+    result = np.array([[sum_first/n,sum_diag/n],[sum_diag/n,sum_last/n]])
     return result
     
-    
+print "By function"
 print print_cov(X,Y)
 """
 (i) (2 points) Verifying the equation in X: x  ̄ 2 = (x̄ 2 +σ 2 (x)), where σ(x) is the estimate
@@ -127,7 +130,7 @@ of the standard deviation.
 """
 print "\nAnswer i)\n"
 First = np.array([1,2,3,4])
-Second = np.matrix([9,6,4,1])
+#Second = np.matrix([9,6,4,1])
 
 Third = np.array([1,4,9,16])
 
