@@ -51,6 +51,12 @@ print str(calculate_sum(A)) + "\n"
 """
 (d) (2 points) Sum of all elements in the matrix (use a for/while loop).
 """
+sum_matrix = 0
+for x in range(0,len(A)):
+    for y in range(0,len(A)):
+        sum_matrix = sum_matrix + A[x,y]
+
+print sum_matrix
 """
 
 (e) (1 point) Generate a diagonal matrix B with from [2, 3, 4, 5] (using this vector as
@@ -106,8 +112,10 @@ def print_cov(X,Y):
     for i in range(len(X)):
         sum_first = sum_first + ((X[i]**2)-(x_mean**2))
         sum_last = sum_last +((Y[i]**2)-(y_mean)**2)
+        print sum_last
         sum_diag = sum_diag + ((X[i]*Y[i])-(x_mean*y_mean))
-    result.append((sum_first,sum_last,sum_diag))
+        print sum_diag
+    result.append((sum_first/n,sum_last/n,sum_diag/n))
     return result
     
     
