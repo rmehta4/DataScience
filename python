@@ -1,0 +1,136 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep 26 23:58:32 2016
+
+@author: rutvij
+"""
+
+import scipy.io
+import sys
+import numpy as np
+import pandas as pd
+from scipy import stats
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.externals.six import StringIO 
+import pydot
+
+mat = scipy.io.loadmat('hw2.mat')
+
+
+#############Q1
+#print mat.keys()
+#print (mat['X_train'].shape)
+
+
+
+#####################b
+#==============================================================================
+# 
+new_xtest =stats.zscore(mat['X_test'])
+new_ytest =stats.zscore(mat['Y_test'])
+# 
+new_xtrain =stats.zscore(mat['X_train'])
+new_ytrain =stats.zscore(mat['Y_train'])
+
+# 
+# print len(new_xtest)
+# print len(new_ytest)
+# print np.shape(new_xtrain)
+# print np.shape(new_ytrain)
+# 
+#==============================================================================
+###############################c
+
+#### calculate co-variance
+
+cov_x = np.cov(np.transpose(new_xtrain))
+#cov_y= np.cov(np.transpose(new_ytrain))
+
+#print cov_x.shape
+#print cov_y
+
+eig_val_cov, eig_vec_cov = np.linalg.eig(cov_x)
+#print eig_val_cov
+#print eig_vec_cov
+#eig_val_cov, eig_vec_cov = np.linalg.eig(cov_mat)
+
+srt = np.argsort( eig_val_cov )[::-1]
+eig_vec_cov = np.matrix( eig_vec_cov[:,srt] )
+eig_val_cov = eig_val_cov[srt]
+print eig_val_cov
+
+eig_val_pca = eig_vec_cov[:,:50]
+
+print "aaaaaaaaaaaaaaaaaaaaaaaaaaa"
+print (eig_val_pca.shape)
+print (new_xtrain.shape)
+
+reduced_data = new_xtrain * eig_val_pca
+print reduced_data.shape
+df1 = pd.DataFrame((reduced_data))
+df2 = pd.DataFrame(mat['Y_train'] ,columns=['X1'])
+print reduced_data.shape
+print df1.shape
+print df2.shape
+result = pd.concat([df2, df1], axis=1)
+#print result
+print new_xtest.shape
+a1 = pd.DataFrame(new_xtest)
+a2 = pd.DataFrame(eig_val_pca)
+
+
+pred = new_xtest * eig_val_pca
+print pred.shape
+df3 = pd.DataFrame((pred))
+df4 = pd.DataFrame(mat['Y_test'] ,columns=['X1'])
+result1 = pd.concat([df4, df3], axis=1)
+clf = DecisionTreeClassifier(random_state=0)
+Y = np.asarray(result['X1'] ,dtype="|S6")
+data = clf.fit(result,Y)
+output = data.predict(result1)
+#print output
+
+print np.asscalar(output[0])
+print mat['Y_test'][0]
+#a_int = a.tolist()
+count_acc = 0
+
+
+
+#print result
+#print reduced_data.shape
+#print new_ytrain.shape
+#s1 = pd.Series(reduced_data)
+#s2 = pd.Series(new_ytrain)
+#pd.concat([s1, s2])
+#print s1
+#####
+##### combine reduced data with yrain
+##### give header name
+
+
+reduced_test = new_xtest * eig_val_pca
+#print reduced_test.shape
+regressor = DecisionTreeRegressor(random_state=0)
+regressor.fit(reduced_data,new_ytrain)
+#print regressor.predict(reduced_test)
+#==============================================================================
+# 
+# for i in range(0,len(mat['X_test'])):
+#    np_array.append(np.mean(mat['X_test'][i]))
+#    np_sd.append(np.std(mat['X_test'][i]))
+#    
+# 
+# 
+# for i in range(0,len(mat['X_test'])):
+#     print np_sd[i]
+#     
+#     
+# 
+# print(len(np_array))
+# print(len(np_sd))
+# 
+# z_score_x_test = []
+#==============================================================================
+
