@@ -20,6 +20,12 @@ from sklearn import svm , grid_search
 from sklearn import metrics
 from sklearn.cross_validation import train_test_split
 
+
+"""
+Question a
+
+"""
+
 mat = scipy.io.loadmat('hw3data.mat')
 print mat.keys()
 mat_Y = mat['Y_target']
@@ -33,53 +39,71 @@ for i in range(0,len(mat_Y[0])):
         result.append(1)
     elif(mat_Y[1][i] == 1):
        result.append(2)
-      
+       
+
+"""
+
+Question b
+
+"""
 X_train, X_test, y_train, y_test = train_test_split(mat_X, result, test_size=0.4)
 
-C_range = 10.0 ** np.arange(-2, 2)
-gamma_range = 10.0 ** np.arange(-2, 2)
 
-parameters = {'kernel':('linear','poly','sigmoid'),'gamma':gamma_range.tolist(), 'C':C_range.tolist()}
-#'kernel':('linear','poly','rbf','sigmoid')
-svr = svm.SVC()
-clf = grid_search.GridSearchCV(svr,parameters)
-clf.fit(X_train, y_train)
-y_predicted=clf.predict(X_test)
-print clf.score(X_test,y_test)
+"""
 
-#print clf.best_estimator_
+Question c
 
+"""
 
-print "Classification report for %s" % clf
-print
-print metrics.classification_report(y_test, y_predicted)
-print
-print "Confusion matrix"
-print metrics.confusion_matrix(y_test, y_predicted)
-#==============================================================================
-# np.random.shuffle(result)
-# 
-# training_set = np.array(result[:int(len(result)*0.6)])
-# testing_set = np.array(result [:int(len(result)*0.4)])
-# print (testing_set).shape
-# 
-# print(training_set).shape
-# #training_set.reshape(training_set,1)
-# Y = np.squeeze(np.asarray(training_set))
-# print Y.shape
-# #clf.fit(training_set,Y)
-# 
-# X = mat['X'].T
-# print(X[:1200][0])
-# clf = svm.SVC()
-# clf.fit(X[:1200], training_set)
-# clf.predict(X[:800])
-# 
-# 
-#==============================================================================
+clf_rbf = svm.SVC(kernel='rbf',C=10.0)
+clf_poly = svm.SVC(kernel='poly',C=1.0,gamma=1.0)
+clf_linear = svm.SVC(kernel='linear',C=1.0)
+clf_sigmoid = svm.SVC(kernel='sigmoid',C=1.0,gamma=0.1,coef0 =0.3)
+clf_quadratic = svm.SVC(kernel='poly',C=1.0,degree=2,gamma=1.0)
 
 
+clf_rbf.fit(X_train, y_train)
+y_rbf=clf_rbf.predict(X_test)
 
+clf_poly.fit(X_train, y_train)
+y_poly=clf_poly.predict(X_test)
+
+clf_linear.fit(X_train, y_train)
+y_linear=clf_linear.predict(X_test)
+
+clf_sigmoid.fit(X_train, y_train)
+y_sigmoid=clf_sigmoid.predict(X_test)
+
+clf_quadratic.fit(X_train, y_train)
+y_quadratic=clf_quadratic.predict(X_test)
+
+print "rbf score"
+print clf_rbf.score(X_test,y_test)
+print "poly score"
+print clf_poly.score(X_test,y_test)
+print "linear score"
+print clf_linear.score(X_test,y_test)
+print "sigmoid score"
+print clf_sigmoid.score(X_test,y_test)
+print "quadratic score"
+print clf_quadratic.score(X_test,y_test)
+print "\n\n\n"
+
+"""
+
+Question d
+
+"""
+print "+++++++++++++++++++++++rbf metrics+++++++++++++++++++++++"
+print metrics.classification_report(y_test, y_rbf,digits=4)
+print "+++++++++++++++++++++++poly metrics++++++++++++++++++++++++"
+print metrics.classification_report(y_test, y_poly,digits=4)
+print "+++++++++++++++++++++++linear metrics++++++++++++++++++++++"
+print metrics.classification_report(y_test, y_linear,digits=4)
+print "+++++++++++++++++++++++sigmoid metrics+++++++++++++++++++++"
+print metrics.classification_report(y_test, y_sigmoid,digits=4)
+print "+++++++++++++++++++++++quadratic metrics++++++++++++++++++++++++"
+print metrics.classification_report(y_test, y_quadratic,digits=4)
 
 
 
