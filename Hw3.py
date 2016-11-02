@@ -45,6 +45,8 @@ for i in range(0,len(mat_Y[0])):
 
 Question b
 
+train_test_split will randomly distribute data in (training , label ) pair
+
 """
 X_train, X_test, y_train, y_test = train_test_split(mat_X, result, test_size=0.4)
 
@@ -94,15 +96,15 @@ print "\n\n\n"
 Question d
 
 """
-print "+++++++++++++++++++++++rbf metrics+++++++++++++++++++++++"
+print "+++++++++++++++++++++++ rbf metrics +++++++++++++++++++++++"
 print metrics.classification_report(y_test, y_rbf,digits=4)
-print "+++++++++++++++++++++++poly metrics++++++++++++++++++++++++"
+print "+++++++++++++++++++++++ poly metrics ++++++++++++++++++++++++"
 print metrics.classification_report(y_test, y_poly,digits=4)
-print "+++++++++++++++++++++++linear metrics++++++++++++++++++++++"
+print "+++++++++++++++++++++++ linear metrics ++++++++++++++++++++++"
 print metrics.classification_report(y_test, y_linear,digits=4)
-print "+++++++++++++++++++++++sigmoid metrics+++++++++++++++++++++"
+print "+++++++++++++++++++++++ sigmoid metrics +++++++++++++++++++++"
 print metrics.classification_report(y_test, y_sigmoid,digits=4)
-print "+++++++++++++++++++++++quadratic metrics++++++++++++++++++++++++"
+print "+++++++++++++++++++++++ quadratic metrics ++++++++++++++++++++++++"
 print metrics.classification_report(y_test, y_quadratic,digits=4)
 
 
